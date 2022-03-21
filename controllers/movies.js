@@ -1,26 +1,54 @@
 const { response } = require('express');
+const Movie = require('../models/movie');
 
-const moviesGet = (req, res = response) => {
+const moviesGet = async(req, res = response) => {
+    const [total, movies] = await Promise.all([
+        Movie.countDocuments(),
+        Movie.find().sort({ release_date: -1 })
+    ]);
+                        
     res.json({
-        msg: 'get api - controller'                
+        total,
+        movies
     })
 }
 
-const moviesPost = (req, res = response) => {
+const moviesPost = async(req, res = response) => {
+    const {title, release_date, genre, plot} = req.body;
+    const movie = new Movie({title, release_date, genre, plot});
+
+    //verifico title
+    const existsTitle = await Movie.findOne({title});
+    if (existsTitle) {
+        return res.status(400).json({
+            msg: 'Title already exists'
+        })
+    }
+    await movie.save();
+
     res.json({
-        msg: 'post api - controller'                
+        movie          
     })
 }
 
-const moviesPut = (req, res = response) => {
+const moviesPut = async(req, res = response) => {
+    const {id} = req.params;
+    const { title, ...resto } = req.body;
+
+    const movie = await Movie.findByIdAndUpdate(id, resto);
+
     res.json({
-        msg: 'put api - controller'                
+        movie              
     })
 }
 
-const moviesDelete = (req, res = response) => {
+const moviesDelete = async(req, res = response) => {
+    const {id} = req.params;
+
+    const movie = await Movie.findByIdAndUpdate(id, {status: false});
+
     res.json({
-        msg: 'delete api - controller'                
+        movie         
     })
 }
 
