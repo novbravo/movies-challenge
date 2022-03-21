@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const { dbConnection } = require('../database/config');
 
 class Server {
     constructor() {
@@ -9,11 +10,18 @@ class Server {
         this.moviePath = '/api/movies';
         this.ratingPath = '/api/ratings';
 
+        //conexión con base de datos
+        this.conectarDb();
+
         // middlewares
         this.middlewares();    
 
         // rutas de la aplicación
         this.routes();
+    }
+
+    async conectarDb() {
+        await dbConnection();
     }
 
     middlewares() {
