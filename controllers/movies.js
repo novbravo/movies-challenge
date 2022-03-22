@@ -1,6 +1,16 @@
 const { response } = require('express');
 const Movie = require('../models/movie');
 
+const movieGet = async(req, res = response) => {
+    const {id} = req.params;   
+
+    const movie = await Movie.findById(id);
+
+    res.json({
+        movie              
+    })
+}
+
 const moviesGet = async(req, res = response) => {
     const [total, movies] = await Promise.all([
         Movie.countDocuments(),
@@ -53,6 +63,7 @@ const moviesDelete = async(req, res = response) => {
 }
 
 module.exports = {
+    movieGet,
     moviesGet,
     moviesPost,
     moviesPut,

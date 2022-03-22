@@ -3,11 +3,17 @@ const { check } = require('express-validator');
 
 const { ValidarCampos, MovieExists, ExistsMovieById } = require('../middlewares/validate-fields');
 
-const { moviesGet, moviesPost, moviesPut, moviesDelete } = require('../controllers/movies');
+const { moviesGet, movieGet, moviesPost, moviesPut, moviesDelete } = require('../controllers/movies');
 
 const router = Router();
 
 router.get('/', moviesGet)
+
+router.get('/:id', [
+    check('id', 'ID is not valid').isMongoId(),
+    check('id').custom(ExistsMovieById),
+    ValidarCampos
+], movieGet)
 
 router.put('/:id', [
     check('id', 'ID is not valid').isMongoId(),
@@ -21,14 +27,12 @@ router.post('/', [
     check('genre', 'Genre is required').not().isEmpty(),
     check('title').custom(MovieExists),
     ValidarCampos
-],
-moviesPost)
+], moviesPost)
 
 router.delete('/:id', [
     check('id', 'ID is not valid').isMongoId(),
     check('id').custom(ExistsMovieById),
     ValidarCampos
-],
-moviesDelete)
+], moviesDelete)
 
 module.exports = router;

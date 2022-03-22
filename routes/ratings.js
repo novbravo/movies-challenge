@@ -1,28 +1,27 @@
 const { Router } = require('express');
+const { check } = require('express-validator');
+
+const { ExistsRatingById, ValidarCampos } = require('../middlewares/validate-fields');
+
+const { ratingsPost, ratingsGet, ratingsPut } = require('../controllers/ratings');
+
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.json({
-        msg: 'get api'                
-    })
-})
+router.get('/', ratingsGet)
 
-router.put('/', (req, res) => {
-    res.json({
-        msg: 'put api'                
-    })
-})
+router.put('/:id', [
+    check('id', 'ID is not valid').isMongoId(),
+    check('id').custom(ExistsRatingById),
+    check('rating', 'Rating is required').not().isEmpty(),
+    check('rating', 'Rating must be number'),
+    ValidarCampos
+], ratingsPut)
 
-router.post('/', (req, res) => {
-    res.json({
-        msg: 'post api'                
-    })
-})
+router.post('/', [
+    check('rating', 'Rating is required').not().isEmpty(),
+    ValidarCampos
+], ratingsPost)
 
-router.delete('/', (req, res) => {
-    res.json({
-        msg: 'delete api'                
-    })
-})
+router.delete('/', )
 
 module.exports = router;

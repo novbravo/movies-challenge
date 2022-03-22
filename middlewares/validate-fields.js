@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const Movie = require('../models/movie');
 const User = require('../models/user');
+const Rating = require('../models/rating');
 
 const ValidarCampos = (req, res, next) => {
     const errors = validationResult(req);
@@ -40,8 +41,16 @@ const ExistsMovieById = async( id ) => {
     }
 }
 
+const ExistsRatingById = async( id ) => {
+    const existRating = await Rating.findById(id);
+    if(!existRating) {
+        throw new Error(`Rating ID ${ id } not exists` );
+    }
+}
+
 module.exports = {
     ValidarCampos,
     EmailExists, ExistsUserById,
-    MovieExists, ExistsMovieById
+    MovieExists, ExistsMovieById,
+    ExistsRatingById
 }
