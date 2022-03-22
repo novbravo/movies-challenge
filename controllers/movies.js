@@ -43,7 +43,7 @@ const moviesPost = async(req, res = response) => {
 
 const moviesPut = async(req, res = response) => {
     const {id} = req.params;
-    const { title, ...resto } = req.body;
+    const { ...resto } = req.body;
 
     const movie = await Movie.findByIdAndUpdate(id, resto);
 
