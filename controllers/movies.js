@@ -35,11 +35,22 @@ const moviesPost = async(req, res = response) => {
             msg: 'Title already exists'
         })
     }
-    await movie.save();
+    await movie.save((err, movieDb) => {
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: err
+            });
+        }
+     
+        res.json({
+            movie: movieDb
+        });
+    });
 
-    res.json({
-        movie          
-    })
+    // res.json({
+    //     movie          
+    // })
 }
 
 const moviesPut = async(req, res = response) => {
