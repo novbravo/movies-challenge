@@ -15,6 +15,27 @@ const ratingsGet = async(req, res = response) => {
     })
 }
 
+const ratingsGetByMovie = async(req, res = response) => {
+    const { id } = req.params;
+    const ratings = await Rating.find({'movie': id})
+                                .populate('movie');
+    
+    let avg = 0;                     
+    if (ratings.length > 0) {
+        let sum = 0;
+        for( var i = 0; i < ratings.length; i++ ){
+            sum += parseInt( ratings[i].rating, 10 );
+        }
+
+        avg = sum/ratings.length;
+    }
+    res.json({
+        avg,
+        ratings
+    });
+}
+
+
 const ratingsPost = async(req, res = response) => {
     const { user, movie, comment, rating} = req.body;
     const ratingObj = new Rating({ user, movie, comment, rating });
@@ -51,5 +72,6 @@ module.exports = {
     ratingsPost,
     ratingsGet,
     ratingsPut,
+    ratingsGetByMovie
     // ratingsDelete
 }

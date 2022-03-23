@@ -3,11 +3,13 @@ const { check } = require('express-validator');
 
 const { ExistsRatingById, ValidarCampos } = require('../middlewares/validate-fields');
 
-const { ratingsPost, ratingsGet, ratingsPut } = require('../controllers/ratings');
+const { ratingsPost, ratingsGet, ratingsPut, ratingsGetByMovie } = require('../controllers/ratings');
 
 const router = Router();
 
 router.get('/', ratingsGet)
+
+router.get('/:id', ratingsGetByMovie)
 
 router.put('/:id', [
     check('id', 'ID is not valid').isMongoId(),

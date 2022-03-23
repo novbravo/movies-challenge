@@ -47,10 +47,6 @@ const moviesPost = async(req, res = response) => {
             movie: movieDb
         });
     });
-
-    // res.json({
-    //     movie          
-    // })
 }
 
 const moviesPut = async(req, res = response) => {
