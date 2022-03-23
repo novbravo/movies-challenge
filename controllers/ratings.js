@@ -18,7 +18,8 @@ const ratingsGet = async(req, res = response) => {
 const ratingsGetByMovie = async(req, res = response) => {
     const { id } = req.params;
     const ratings = await Rating.find({'movie': id})
-                                .populate('movie');
+                                .populate('movie')
+                                .populate('user');
     
     let avg = 0;                     
     if (ratings.length > 0) {
