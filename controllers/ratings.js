@@ -36,7 +36,6 @@ const ratingsGetByMovie = async(req, res = response) => {
     });
 }
 
-
 const ratingsPost = async(req, res = response) => {
     const { user, movie, comment, rating} = req.body;
     const ratingObj = new Rating({ user, movie, comment, rating });

@@ -25,7 +25,8 @@ const usersPost = async(req, res = response) => {
     const existsEmail = await User.findOne({email});
     if (existsEmail) {
         return res.status(400).json({
-            msg: 'Email already exists'
+            msg: `Email ${ email } already exists`,//'Email already exists'
+            success: false
         })
     }
 
@@ -35,7 +36,8 @@ const usersPost = async(req, res = response) => {
 
     await user.save();
     res.json({
-        user         
+        user,
+        success: true 
     })
 }
 

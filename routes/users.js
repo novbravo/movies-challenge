@@ -17,7 +17,6 @@ router.post('/', [
     check('name', 'Name is required').not().isEmpty(),
     check('password', 'Password is required').not().isEmpty(),
     check('email', 'Email is not valid').isEmail(),
-    check('email').custom(EmailExists),
     ValidarCampos
 ], usersPost)
 
