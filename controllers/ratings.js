@@ -5,6 +5,8 @@ const ratingsGet = async(req, res = response) => {
     const [total, ratings] = await Promise.all([
         Rating.countDocuments(),
         Rating.find()
+            .populate('user')
+            .populate('movie')
     ]);
                         
     res.json({

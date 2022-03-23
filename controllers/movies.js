@@ -14,7 +14,8 @@ const movieGet = async(req, res = response) => {
 const moviesGet = async(req, res = response) => {
     const [total, movies] = await Promise.all([
         Movie.countDocuments(),
-        Movie.find().sort({ release_date: -1 })
+        Movie.find()
+            .sort({ release_date: -1 })
     ]);
                         
     res.json({
