@@ -9,6 +9,8 @@ class Server {
         this.usersPath = '/api/users';
         this.moviePath = '/api/movies';
         this.ratingPath = '/api/ratings';
+        this.ratingMoviesPath = '/api/ratings/ratings';
+        this.authPath = '/api/auth';
 
         //conexión con base de datos
         this.conectarDb();
@@ -39,6 +41,8 @@ class Server {
         this.app.use(this.usersPath, require('../routes/users'))
         this.app.use(this.moviePath, require('../routes/movies'))
         this.app.use(this.ratingPath, require('../routes/ratings'))
+        this.app.use(this.ratingMoviesPath, require('../routes/ratings'))
+        this.app.use(this.authPath, require('../routes/auth'))
     }
 
     listen() {

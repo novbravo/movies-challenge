@@ -1,6 +1,8 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 
+const { generateJwt } = require('../helpers/generate-jwt');
+
 const User = require('../models/user');
 
 const usersGet = async (req = request, res = response) => {
@@ -24,8 +26,8 @@ const usersPost = async(req, res = response) => {
     //verifico email
     const existsEmail = await User.findOne({email});
     if (existsEmail) {
-        return res.status(400).json({
-            msg: `Email ${ email } already exists`,//'Email already exists'
+        return res.status(200).json({
+            msg: `Email ${ email } already exists`,
             success: false
         })
     }
@@ -35,9 +37,11 @@ const usersPost = async(req, res = response) => {
     user.password = bcryptjs.hashSync(password, salt);
 
     await user.save();
+    const token = await generateJwt(user._id);
     res.json({
         user,
-        success: true 
+        success: true,
+        token
     })
 }
 

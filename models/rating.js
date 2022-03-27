@@ -15,4 +15,11 @@ const RatingSchema = new Schema({
     }
 });
 
+RatingSchema.methods.toJSON = function() {
+    let rating = this;
+    let ratingObject = rating.toObject();
+
+    return ratingObject;
+}
+
 module.exports = model('Rating', RatingSchema);

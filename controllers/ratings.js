@@ -7,11 +7,36 @@ const ratingsGet = async(req, res = response) => {
         Rating.find()
             .populate('user')
             .populate('movie')
+    ]); 
+    
+    
+    const ratingsAvg = await Rating.aggregate([
+        {
+            '$group': {
+                '_id': '$movie', 
+                'avgRating': {
+                    '$avg': '$rating'
+                }
+            }
+        }
+        ,{
+            '$lookup': {
+                'from': 'movies', 
+                'localField': '_id', 
+                'foreignField': '_id', 
+                'as': 'movie'
+          }
+        },{
+            '$sort': {
+              'avgRating': -1
+            }
+        }
     ]);
                         
     res.json({
         total,
-        ratings
+        ratings,
+        ratingsAvg
     })
 }
 
@@ -29,11 +54,42 @@ const ratingsGetByMovie = async(req, res = response) => {
         }
 
         avg = sum/ratings.length;
-    }
+    }    
+  
     res.json({
         avg,
         ratings
     });
+}
+
+const ratingsGetByRating = async(req, res = response) => {
+    //const ratings1 = 'hola';
+    // const ratings1 = await Rating.aggregate([
+    //     {
+    //         '$group': {
+    //             '_id': '$movie', 
+    //             'avgRating': {
+    //                 '$avg': '$rating'
+    //             }
+    //         }
+    //     }
+    //     ,{
+    //         '$lookup': {
+    //             'from': 'movies', 
+    //             'localField': '_id', 
+    //             'foreignField': '_id', 
+    //             'as': 'movie'
+    //       }
+    //     },{
+    //         '$sort': {
+    //           'avgRating': -1
+    //         }
+    //     }
+    // ]);
+
+    // res.json({
+    //     ratings1
+    // });
 }
 
 const ratingsPost = async(req, res = response) => {
@@ -72,6 +128,7 @@ module.exports = {
     ratingsPost,
     ratingsGet,
     ratingsPut,
-    ratingsGetByMovie
+    ratingsGetByMovie,
+    ratingsGetByRating
     // ratingsDelete
 }
